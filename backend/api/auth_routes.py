@@ -1,6 +1,8 @@
 from flask import Blueprint
 from core.responses import ok
 from db.mongo import get_db
+from flask import request
+from services.auth_service import create_user, verify_user
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
@@ -40,3 +42,37 @@ def init_db():
         return {"message": "DB initialized", "id": str(result.inserted_id)}, 200
     except Exception as e:
         return {"message": "init failed", "error": str(e)}, 500
+
+@auth_bp.post("/register")
+def register():
+    data = request.get_json() or {}
+    username = data.get("username")
+    password = data.get("password")
+    role = data.get("role", "student")
+    class_id = data.get("class_id")
+
+    if not username or not password or not class_id:
+        return {"message": "username/password/class_id required"}, 400
+
+    user_id, err = create_user(username, password, role, class_id)
+    if err:
+        return {"message": err}, 409
+
+    return {"message": "registered", "user_id": user_id}, 201
+
+
+@auth_bp.post("/login")
+def login():
+    data = request.get_json() or {}
+    username = data.get("username")
+    password = data.get("password")
+
+    if not username or not password:
+        return {"message": "username/password required"}, 400
+
+    user = verify_user(username, password)
+    if not user:
+        return {"message": "invalid credentials"}, 401
+
+    # 先回 user 基本資料（下一步再做 JWT）
+    return {"message": "login ok", "user": user}, 200
