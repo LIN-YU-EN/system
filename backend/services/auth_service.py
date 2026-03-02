@@ -1,5 +1,5 @@
-from werkzeug.security import generate_password_hash, check_password_hash
 from db.mongo import col
+
 
 def create_user(username: str, password: str, role: str, class_id: str):
     users = col("users")
@@ -10,26 +10,34 @@ def create_user(username: str, password: str, role: str, class_id: str):
 
     doc = {
         "username": username,
-        "password_hash": generate_password_hash(password),
+        "password": password,   # 暫時用明碼（你說先不要 hash）
         "role": role,
         "class_id": class_id,
     }
     result = users.insert_one(doc)
-    return str(result.inserted_id), None
+
+    data = {
+        "id": str(result.inserted_id),
+        "username": username,
+        "role": role,
+        "class_id": class_id,
+    }
+    return data, None
+
 
 def verify_user(username: str, password: str):
     users = col("users")
     user = users.find_one({"username": username})
     if not user:
-        return None
+        return None, "user not found"
 
-    if not check_password_hash(user["password_hash"], password):
-        return None
+    if user.get("password") != password:
+        return None, "invalid password"
 
-    # 回傳必要資訊（不要回傳 password_hash）
-    return {
+    data = {
         "id": str(user["_id"]),
         "username": user["username"],
         "role": user.get("role"),
         "class_id": user.get("class_id"),
     }
+    return data, None
