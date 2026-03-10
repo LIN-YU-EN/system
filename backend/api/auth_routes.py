@@ -39,16 +39,17 @@ def init_db():
 @auth_bp.post("/register")
 def register():
     data = request.get_json(silent=True) or {}
-
+    name = data.get("name")
+    gender = data.get("gender")
     username = data.get("username")
     password = data.get("password")
     class_id = data.get("class_id")
     role = data.get("role", "student")
 
-    if not username or not password or not class_id:
-        return {"success": False, "message": "username/password/class_id required"}, 400
+    if not username or not password or not class_id or not name or not gender:
+        return {"success": False, "message": "username/password/name/gender/class_id required"}, 400
 
-    user, err = create_user(username, password, role, class_id)
+    user, err = create_user(name, gender, username, password, role, class_id)
     if err:
         # 這裡最常見就是 username already exists
         return {"success": False, "message": err}, 409

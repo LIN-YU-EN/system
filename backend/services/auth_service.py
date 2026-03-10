@@ -1,7 +1,7 @@
 from db.mongo import col
 
 
-def create_user(username: str, password: str, role: str, class_id: str):
+def create_user(username: str, password: str, role: str, class_id: str, name: str, gender: str):
     users = col("users")
 
     # username 必須唯一
@@ -9,6 +9,8 @@ def create_user(username: str, password: str, role: str, class_id: str):
         return None, "username already exists"
 
     doc = {
+        "name": name,
+        "gender": gender,
         "username": username,
         "password": password,   # 暫時用明碼（你說先不要 hash）
         "role": role,
