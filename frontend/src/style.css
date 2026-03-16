@@ -28,6 +28,15 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: linear-gradient(
+    120deg,
+    #4f7cff 0%,
+    #6a5cff 35%,
+    #9b5de5 65%,
+    #ff7aa2 100%
+  );
+
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 h1 {
@@ -45,6 +54,7 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  
 }
 button:hover {
   border-color: #646cff;

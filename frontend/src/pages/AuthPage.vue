@@ -11,10 +11,6 @@
       <div class="form">
         <!-- LOGIN -->
         <template v-if="tab==='login'">
-          <select v-model="loginRole" class="input">
-            <option value="teacher">老師</option>
-            <option value="student">學生</option>
-          </select>
 
           <input v-model="loginUsername" class="input" placeholder="帳號" />
           <input v-model="loginPassword" class="input" type="password" placeholder="密碼" />
@@ -57,7 +53,6 @@ const tab = ref("login");
 const msg = ref("");
 
 // LOGIN
-const loginRole = ref("student");
 const loginUsername = ref("");
 const loginPassword = ref("");
 
@@ -74,7 +69,6 @@ async function onLogin() {
     const res = await api.post("/api/auth/login", {
       username: loginUsername.value,
       password: loginPassword.value,
-      role: loginRole.value, // 可保留讓後端做一致性檢查
     });
 
     const user = res.data?.user;
@@ -125,7 +119,7 @@ async function onSignup() {
   display:flex;
   align-items:center;
   justify-content:center;
-  background: radial-gradient(circle at 30% 20%, #1c1c1c, #0b0b0b);
+  
 }
 .card{
   width: 420px;
