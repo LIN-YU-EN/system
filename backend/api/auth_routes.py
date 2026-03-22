@@ -49,13 +49,12 @@ def register():
     if not username or not password or not class_id or not name or not gender:
         return {"success": False, "message": "username/password/name/gender/class_id required"}, 400
 
-    user, err = create_user(name, gender, username, password, role, class_id)
+    user, err = create_user(username, password, role, class_id, name, gender)
     if err:
-        # 這裡最常見就是 username already exists
         return {"success": False, "message": err}, 409
 
-    # 統一成功格式
     return ok(message="registered", data=user, status_code=201)
+
 
 @auth_bp.post("/login")
 def login():
@@ -67,9 +66,19 @@ def login():
     if not username or not password:
         return {"success": False, "message": "username/password required"}, 400
 
-    user, err = verify_user(username, password)
-    if err:
-        return {"success": False, "message": err}, 401
+    db = get_db()
+    users = db["users"]
+    user = users.find_one({"username": username})
 
-    # 統一成功格式
-    return ok(message="login ok", data=user, status_code=200)
+    if not user or user.get("password") != password:
+        return {"success": False, "message": "invalid credentials"}, 401
+
+    result = {
+        "id": str(user["_id"]),
+        "username": user["username"],
+        "name": user.get("name"),
+        "role": user.get("role"),
+        "class_id": user.get("class_id"),
+    }
+
+    return {"success": True, "user": result}

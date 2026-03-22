@@ -28,6 +28,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  overflow: hidden;
   background: linear-gradient(
     120deg,
     #4f7cff 0%,
@@ -73,6 +74,7 @@ button:focus-visible {
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  overflow: hidden;
 }
 
 @media (prefers-color-scheme: light) {
