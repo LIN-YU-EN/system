@@ -2,7 +2,12 @@
   <div class="nav">
     <div class="left">
       <span class="brand" @click="go('/')">Python</span>
-    </div>
+
+      <div v-if="user && user.role === 'teacher'" class="nav-links">
+        <router-link to="/teacher" class="nav-link">儀表板</router-link>
+        <router-link to="/teacher/upload" class="nav-link">Upload</router-link>
+      </div>
+</div>
 
     <div class="right">
         <template v-if="user">
@@ -75,7 +80,7 @@ function logout() {
   localStorage.removeItem("user");
   user.value = null;
   menuOpen.value = false;
-  router.push("/login");
+  router.push("/");
 }
 </script>
 
@@ -110,7 +115,7 @@ function logout() {
 }
 
 .action-btn,
-.user-btn {
+.user-btn {   
   padding: 8px 18px;
   border-radius: 20px;
   border: none;
@@ -183,5 +188,24 @@ function logout() {
 
 .logout-item {
   color: #c0392b;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: 24px;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  opacity: 0.95;
+}
+
+.nav-link:hover {
+  opacity: 1;
+  text-decoration: underline;
 }
 </style>

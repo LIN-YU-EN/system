@@ -74,12 +74,10 @@ async function onLogin() {
     const user = res.data?.user;
     localStorage.setItem("user", JSON.stringify(user));
 
-    // ✅ 以資料庫回傳的 user.role 為準（不要信前端下拉）
     if (user?.role === "teacher") {
-      router.push("/teacher/upload");
-    } else {
-      alert("學生端尚未開放（目前先做教師端上傳模組）");
-      router.push("/login");
+      router.push("/teacher");
+    } else if (user?.role === "student") {
+      router.push("/student");
     }
   } catch (e) {
     msg.value = "登入失敗 ❌（請確認帳密）";

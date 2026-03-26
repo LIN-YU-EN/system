@@ -4,6 +4,7 @@ import TeacherDashboard from "../pages/TeacherDashboard.vue";
 import TeacherUpload from "../pages/TeacherUpload.vue";
 import StudentDashboard from "../pages/StudentDashboard.vue";
 import HomePage from "../pages/HomePage.vue";
+import TeacherUploadFiles from '../pages/TeacherUploadFiles.vue'
 
 const routes = [
   { path: "/", component: HomePage },
@@ -12,6 +13,7 @@ const routes = [
   // 教師端
   { path: "/teacher", component: TeacherDashboard },
   { path: "/teacher/upload", component: TeacherUpload },
+  { path: "/teacher/upload/files", component: TeacherUploadFiles},
   //學生端
   { path: "/student", component: StudentDashboard },
 ];
